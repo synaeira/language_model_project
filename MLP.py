@@ -7,7 +7,7 @@ class MLP_(nn.Module):
      def __init__(self,hidden_layer):
         super().__init__()
 
-        # 64 car 64 colonne dans ma matrice
+        # 64 car 64 colonnes dans ma matrice
         self.firstLinearLayer = nn.Linear(64, hidden_layer)
 
         # je veux la même dimension en entré qu'en sorti
