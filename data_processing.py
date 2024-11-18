@@ -30,4 +30,4 @@ class CharDataset(Dataset):
         
         block_size = 5
         chunk = [self.stoi[char] for char in self.data[idx : idx+block_size+1]]
-        return torch.tensor(chunk[:-1], dtype=torch.int8), torch.tensor(chunk[1:], dtype=torch.int8)
+        return torch.tensor(chunk[:-1], dtype=torch.int64), torch.tensor(chunk[1:], dtype=torch.int64)

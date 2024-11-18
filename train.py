@@ -3,6 +3,8 @@ from transformer import Transformer
 import random
 from torch import nn
 import torch.optim as optim
+import torch
+import matplotlib.pyplot as plt
 
 
 class Trainer() :
@@ -14,15 +16,16 @@ class Trainer() :
 
         # à vérifier
         self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam()
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+
+        self.running_loss = []
 
     def run(self) :
         
-        epoch = 100
+        epoch = 1000
         window_size = 5
         
         self.model.train()
-        running_loss = 0
 
         for e in range(epoch) :
 
@@ -33,12 +36,19 @@ class Trainer() :
             self.optimizer.zero_grad()
             output = self.model(x_train)
 
-            loss = self.criterion(output, y_train)
+            y_train_ont_hot = nn.functional.one_hot(y_train, self.dataloader.get_vocab_size()).to(torch.float)
+
+            loss = self.criterion(output, y_train_ont_hot)
 
             loss.backward()
 
             self.optimizer.step()
 
-            running_loss += loss.item()
+            self.running_loss.append(loss.item())
 
-            
+train = Trainer("shakespeare-data.txt")
+
+train.run()
+
+plt.plot(train.running_loss)
+plt.show()
