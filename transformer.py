@@ -22,9 +22,6 @@ class Transformer(nn.Module):
          
         x_emb = self.emb(x)
         x_t = self.tblock(x_emb)
-        # H = self.l1(x_t)
-        # y = x_t.T @ H
-
         y = self.l1(x_t)
 
         return y
