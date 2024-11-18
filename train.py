@@ -4,7 +4,6 @@ import random
 from torch import nn
 import torch.optim as optim
 import torch
-import matplotlib.pyplot as plt
 
 
 class Trainer() :
@@ -22,8 +21,8 @@ class Trainer() :
 
     def run(self) :
         
-        epoch = 1000
-        window_size = 5
+        epoch = 10000
+        window_size = 50
         
         self.model.train()
 
@@ -46,9 +45,12 @@ class Trainer() :
 
             self.running_loss.append(loss.item())
 
-train = Trainer("shakespeare-data.txt")
+    def save_model(self, path="model.pth"):
+        torch.save({'model_state_dict': self.model.state_dict()}, path)
+        print(f"Modèle sauvegardé à l'emplacement : {path}")
 
-train.run()
+    def load_model(self, path="model.pth"):
+        checkpoint = torch.load(path)
+        self.model.load_state_dict(checkpoint['model_state_dict'])
+        print(f"Modèle chargé depuis l'emplacement : {path}")
 
-plt.plot(train.running_loss)
-plt.show()

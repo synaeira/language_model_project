@@ -1,4 +1,5 @@
 from torch import nn
+import torch
 
 
 class MLP_(nn.Module):
@@ -15,9 +16,10 @@ class MLP_(nn.Module):
 
 
      def forward(self,x):
+         
          # x va être la matrice n X d (avec n le nombre de caractere et d va être 64)
          y = self.firstLinearLayer(x)
-
+         y = torch.relu(y)
          y_2 = self.SecondeLinearLayer(y)
 
 
