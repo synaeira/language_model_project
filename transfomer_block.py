@@ -1,18 +1,18 @@
 from torch import nn
-from mha import MHA_
-from MLP import MLP_
+from mha import MHA
+from mlp import MLP
 
 class TBlock(nn.Module):
      
 
-     def __init__(self):
+     def __init__(self, dim_emb, num_head, hidden_layer):
 
         super().__init__()
 
-        self.ln1 = nn.LayerNorm(normalized_shape=64)
-        self.mha = MHA_(8)
-        self.ln2 = nn.LayerNorm(normalized_shape=64)
-        self.mlp = MLP_(50)
+        self.ln1 = nn.LayerNorm(normalized_shape=dim_emb)
+        self.mha = MHA(dim_emb, num_head)
+        self.ln2 = nn.LayerNorm(normalized_shape=dim_emb)
+        self.mlp = MLP(hidden_layer, dim_emb)
 
      def forward(self, x):
          

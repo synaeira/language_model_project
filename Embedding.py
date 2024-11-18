@@ -2,24 +2,20 @@ import torch
 from torch import nn
 
 
-
-
-class Embedding_(nn.Module):
-     def __init__(self,dico):
+class Embedding(nn.Module):
+     def __init__(self, dico, dim_emb):
         super().__init__()
 
-        # j'ai mis 64 mais reste à determiner combien on veut vraiment
-        self.embedLettre = nn.Embedding(len(dico),64)
-
-        # j'ai mis 64 mais reste à determiner combien on veut vraiment
-        self.embedPosition = nn.Embedding(len(dico),64)
+        self.embedLettre = nn.Embedding(len(dico), dim_emb)
+        self.embedPosition = nn.Embedding(len(dico), dim_emb)
 
 
      def forward(self,x):
-         y_1 = self.embedLettre(x)
+         
+         y1 = self.embedLettre(x)
 
-         position = torch.tensor([i for i in range(len(x))])
+         position = torch.arange(len(x))
 
-         y_2 = self.embedPosition(position)
+         y2 = self.embedPosition(position)
 
-         return y_1 + y_2
+         return y1 + y2

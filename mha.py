@@ -1,12 +1,12 @@
 from torch import nn
 
-class MHA_(nn.Module):
+class MHA(nn.Module):
      
 
-     def __init__(self,nmbr_head):
+     def __init__(self, dim_emb, nmbr_head):
         super().__init__()
 
-        self.multiheadattention = nn.MultiheadAttention(64,nmbr_head)
+        self.multiheadattention = nn.MultiheadAttention(dim_emb, nmbr_head)
 
      def forward(self,x):
          

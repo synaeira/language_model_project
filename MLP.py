@@ -2,25 +2,20 @@ from torch import nn
 import torch
 
 
-class MLP_(nn.Module):
+class MLP(nn.Module):
      
 
-     def __init__(self,hidden_layer):
+     def __init__(self, hidden_layer, dim_emb):
         super().__init__()
 
-        # 64 car 64 colonnes dans ma matrice
-        self.firstLinearLayer = nn.Linear(64, hidden_layer)
-
-        # je veux la même dimension en entré qu'en sorti
-        self.SecondeLinearLayer = nn.Linear(hidden_layer, 64)
+        self.firstLinearLayer = nn.Linear(dim_emb, hidden_layer)
+        self.SecondeLinearLayer = nn.Linear(hidden_layer, dim_emb)
 
 
      def forward(self,x):
          
-         # x va être la matrice n X d (avec n le nombre de caractere et d va être 64)
-         y = self.firstLinearLayer(x)
-         y = torch.relu(y)
-         y_2 = self.SecondeLinearLayer(y)
+         y1 = self.firstLinearLayer(x)
+         y1 = torch.relu(y1)
+         y2 = self.SecondeLinearLayer(y1)
 
-
-         return y_2
+         return y2

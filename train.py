@@ -4,31 +4,31 @@ import random
 from torch import nn
 import torch.optim as optim
 import torch
-
+from tqdm import tqdm
 
 class Trainer() :
 
-    def __init__(self, datafile):
+    def __init__(self, datafile, block_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration):
         
-        self.dataloader = CharDataset(config=None, data=datafile)
-        self.model = Transformer(self.dataloader.stoi, hidden_layer=50)
+        self.dataloader = CharDataset(block_size, datafile)
+
+        self.model = Transformer(self.dataloader.stoi, dim_emb, num_head, hidden_layer, num_transformer)
 
         # à vérifier
         self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.001)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
 
+        self.window_size = block_size
+        self.it = iteration
         self.running_loss = []
 
     def run(self) :
         
-        epoch = 10000
-        window_size = 50
-        
         self.model.train()
 
-        for e in range(epoch) :
+        for _ in tqdm(range(self.it)) :
 
-            end = self.dataloader.__len__() - window_size - 1
+            end = self.dataloader.__len__() - self.window_size - 1
             idx = random.randint(0, end)
             x_train, y_train = self.dataloader.__getitem__(idx)
 
@@ -45,12 +45,11 @@ class Trainer() :
 
             self.running_loss.append(loss.item())
 
+
     def save_model(self, path="model.pth"):
         torch.save({'model_state_dict': self.model.state_dict()}, path)
-        print(f"Modèle sauvegardé à l'emplacement : {path}")
 
     def load_model(self, path="model.pth"):
         checkpoint = torch.load(path)
         self.model.load_state_dict(checkpoint['model_state_dict'])
-        print(f"Modèle chargé depuis l'emplacement : {path}")
 
