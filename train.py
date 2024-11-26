@@ -29,23 +29,31 @@ class Trainer() :
         
         self.model.train()
 
-        for i in range(self.it) :
-            print(i)
+        for i in tqdm(range(self.it)):
 
-            for x_train, y_train in tqdm(self.dataloader) :
 
-                self.optimizer.zero_grad()
-                output = self.model(x_train)
+            x_train = []
+            y_train = []
+            for _ in range(128):
+                x, y = self.dataset.__getitem__(None)
+                x_train.append(x)
+                y_train.append(y)
 
-                y_train_ont_hot = nn.functional.one_hot(y_train, self.dataset.get_vocab_size()).to(torch.float)
+            x_train = torch.stack(x_train)
+            y_train = torch.stack(y_train)
 
-                loss = self.criterion(output, y_train_ont_hot)
+            self.optimizer.zero_grad()
+            output = self.model(x_train)
 
-                loss.backward()
+            y_train_ont_hot = nn.functional.one_hot(y_train, self.dataset.get_vocab_size()).to(torch.float)
 
-                self.optimizer.step()
+            loss = self.criterion(output, y_train_ont_hot)
 
-                self.running_loss.append(loss.item())
+            loss.backward()
+
+            self.optimizer.step()
+
+            self.running_loss.append(loss.item())
 
 
     def save_model(self, path="model.pth"):

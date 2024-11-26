@@ -24,6 +24,6 @@ class TBlock(nn.Module):
         x1_n = self.ln2(x1_res)
         x2 = self.mlp(x1_n)
 
-        y = x2+x1_res
+        y = x2 + x1_res
 
         return y
