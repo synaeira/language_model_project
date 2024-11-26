@@ -18,7 +18,10 @@ class TBlock(nn.Module):
          
         x_n = self.ln1(x)
         x1, _ = self.mha(x_n)
-        x1_n = self.ln2(x1)
+
+        x1_res = x1 + x
+
+        x1_n = self.ln2(x1_res)
         x2 = self.mlp(x1_n)
 
         y = x2+x

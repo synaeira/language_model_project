@@ -3,11 +3,11 @@ from torch import nn
 
 
 class Embedding(nn.Module):
-     def __init__(self, dico, dim_emb):
+     def __init__(self, dico, dim_emb, block_size):
         super().__init__()
 
         self.embedLettre = nn.Embedding(len(dico), dim_emb)
-        self.embedPosition = nn.Embedding(len(dico), dim_emb)
+        self.embedPosition = nn.Embedding(block_size, dim_emb)
 
 
      def forward(self,x):

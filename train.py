@@ -12,7 +12,7 @@ class Trainer() :
         
         self.dataloader = CharDataset(block_size, datafile)
 
-        self.model = Transformer(self.dataloader.stoi, dim_emb, num_head, hidden_layer, num_transformer)
+        self.model = Transformer(self.dataloader.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size)
 
         # à vérifier
         self.criterion = nn.CrossEntropyLoss()

@@ -5,11 +5,11 @@ from embedding import Embedding
 class Transformer(nn.Module):
      
 
-    def __init__(self, dico, dim_emb, num_head, hidden_layer, num_transformer):
+    def __init__(self, dico, dim_emb, num_head, hidden_layer, num_transformer, block_size):
 
         super().__init__()
 
-        self.emb = Embedding(dico, dim_emb)
+        self.emb = Embedding(dico, dim_emb, block_size)
         self.tblock = nn.Sequential(
             *(TBlock(dim_emb, num_head, hidden_layer)
               for _ in range(num_transformer))
