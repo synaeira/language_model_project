@@ -9,36 +9,33 @@ from torch.utils.data import DataLoader
 
 class Trainer() :
 
-    def __init__(self, datafile, block_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration):
+    def __init__(self, datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration, batch_it_max, strong_residual = False):
         
         self.dataset = CharDataset(block_size, datafile)
-        self.dataloader = DataLoader(self.dataset, batch_size=64, shuffle=True)
+        self.dataloader = DataLoader(self.dataset, batch_size, shuffle=True)
 
-        self.model = Transformer(self.dataset.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size)
+        self.model = Transformer(self.dataset.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size, strong_residual)
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
 
         self.window_size = block_size
         self.it = iteration
+        self.batch_it_max = batch_it_max
         self.running_loss = []
 
 
     def run(self) :
         
         self.model.train()
-        batch_it_max = 100
 
-        for i in tqdm(range(self.it)):
+        for _ in tqdm(range(self.it)):
 
             batch_it = 0
             for x_train, y_train in self.dataloader :
-                # print("ici", x_train)
-                # print(x_train.size())
-                # print("la", y_train)
                 
                 batch_it += 1
-                if batch_it > batch_it_max :
+                if batch_it > self.batch_it_max :
                     break
 
                 self.optimizer.zero_grad()

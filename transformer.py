@@ -5,13 +5,13 @@ from embedding import Embedding
 class Transformer(nn.Module):
      
 
-    def __init__(self, dico, dim_emb, num_head, hidden_layer, num_transformer, block_size):
+    def __init__(self, dico, dim_emb, num_head, hidden_layer, num_transformer, block_size, strong_residual):
 
         super().__init__()
 
         self.emb = Embedding(dico, dim_emb, block_size)
         self.tblock = nn.Sequential(
-            *(TBlock(dim_emb, num_head, hidden_layer)
+            *(TBlock(dim_emb, num_head, hidden_layer, strong_residual)
               for _ in range(num_transformer))
         ) 
         self.l1 = nn.Linear(dim_emb, len(dico))
