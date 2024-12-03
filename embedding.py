@@ -14,8 +14,7 @@ class Embedding(nn.Module):
          
          y1 = self.embedLettre(x)
 
-         position = torch.arange(len(x))
-
+         position = torch.arange(x.size(-1))
          y2 = self.embedPosition(position)
 
          return y1 + y2
