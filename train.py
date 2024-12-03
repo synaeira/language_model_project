@@ -6,11 +6,13 @@ import torch.optim as optim
 import torch
 from tqdm import tqdm
 from torch.utils.data import DataLoader
+import wandb
 
 class Trainer() :
 
     def __init__(self, datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration, batch_it_max, strong_residual = False):
         
+        self.strong_residual = strong_residual
         self.dataset = CharDataset(block_size, datafile)
         self.dataloader = DataLoader(self.dataset, batch_size, shuffle=True)
 
@@ -26,6 +28,7 @@ class Trainer() :
 
 
     def run(self) :
+        wandb.init(project=f"my-awesome-project22_residual{self.strong_residual}",)
         
         self.model.train()
 
@@ -43,12 +46,13 @@ class Trainer() :
 
                 y_train_ont_hot = nn.functional.one_hot(y_train, self.dataset.get_vocab_size()).to(torch.float)
                 loss = self.criterion(output, y_train_ont_hot)
-
+                wandb.log({"loss": loss})
                 loss.backward()
 
                 self.optimizer.step()
 
                 self.running_loss.append(loss.item())
+        wandb.finish()
 
 
     def save_model(self, path="model.pth"):
