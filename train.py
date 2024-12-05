@@ -14,8 +14,7 @@ class Trainer() :
         
         self.strong_residual = strong_residual
         self.dataset = CharDataset(block_size, datafile)
-        self.dataloader = DataLoader(self.dataset, batch_size, shuffle=True)
-
+        
         self.model = Transformer(self.dataset.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size, strong_residual)
 
         self.criterion = nn.CrossEntropyLoss()
@@ -33,14 +32,8 @@ class Trainer() :
         self.model.train()
 
         for _ in tqdm(range(self.it)):
-
-            batch_it = 0
-            for x_train, y_train in self.dataloader :
-                
-                batch_it += 1
-                if batch_it > self.batch_it_max :
-                    break
-
+               
+                x_train,y_train = self.dataset.__getitem__()
                 self.optimizer.zero_grad()
                 output = self.model(x_train)
 

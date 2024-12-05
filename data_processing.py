@@ -21,7 +21,7 @@ class CharDataset(Dataset):
     def __len__(self):
         return len(self.data)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx=0):
         # grab a chunk of (block_size + 1) characters from the data
         # encode every character to an integer
         # return the chunk and the shifted version as tensors
