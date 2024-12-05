@@ -21,14 +21,14 @@ class TBlock(nn.Module):
          x_n = self.ln1(x)
          x1, _ = self.mha(x_n)
 
-         x1_res = x1 + x
+         if self.strong_residual :
 
-         x1_n = self.ln2(x1_res)
+            x1 = x1 + x
+
+         x1_n = self.ln2(x1)
          x2 = self.mlp(x1_n)
 
-         if self.strong_residual :
-            y = x2 + x
-         else :
-            y = x2 + x1_res
+         y = x2 + x
+
 
          return y
