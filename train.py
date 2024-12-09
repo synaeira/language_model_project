@@ -10,12 +10,11 @@ import wandb
 
 class Trainer() :
 
-    def __init__(self, datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration, batch_it_max, strong_residual = False):
+    def __init__(self, datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration, batch_it_max):
         
-        self.strong_residual = strong_residual
         self.dataset = CharDataset(block_size, datafile)
         
-        self.model = Transformer(self.dataset.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size, strong_residual)
+        self.model = Transformer(self.dataset.stoi, dim_emb, num_head, hidden_layer, num_transformer, block_size)
 
         self.criterion = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(self.model.parameters(), lr=learning_rate)
@@ -27,7 +26,7 @@ class Trainer() :
 
 
     def run(self) :
-        wandb.init(project=f"my-awesome-project22_residual{self.strong_residual}",)
+        wandb.init(project=f"loss",)
         
         self.model.train()
 
@@ -54,15 +53,3 @@ class Trainer() :
     def load_model(self, path="model.pth"):
         checkpoint = torch.load(path)
         self.model.load_state_dict(checkpoint['model_state_dict'])
-
-
-
-          # x_train = []
-            # y_train = []
-            # for _ in range(128):
-            #     x, y = self.dataset.__getitem__(None)
-            #     x_train.append(x)
-            #     y_train.append(y)
-
-            # x_train = torch.stack(x_train)
-            # y_train = torch.stack(y_train)
