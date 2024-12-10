@@ -8,6 +8,7 @@ class Embedding(nn.Module):
 
         self.embedLettre = nn.Embedding(len(dico), dim_emb)
         self.embedPosition = nn.Embedding(block_size, dim_emb)
+        self.dropout = nn.Dropout(p=0.1)
 
 
      def forward(self,x):

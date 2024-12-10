@@ -12,7 +12,6 @@ class MHA(nn.Module):
          
          causal_mask = torch.triu(torch.ones(len(x), len(x)) * float('-inf'), diagonal=1)
 
-         # self attention ou cross attention (à décider)
-         y = self.multiheadattention(query=x, key=x, value=x, need_weights = False, attn_mask = causal_mask )
+         y = self.multiheadattention(query=x, key=x, value=x, need_weights = False, attn_mask = causal_mask)
 
          return y

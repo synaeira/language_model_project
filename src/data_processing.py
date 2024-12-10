@@ -1,6 +1,5 @@
 from torch.utils.data import Dataset
 import torch
-import random
 
 class CharDataset(Dataset):
 
@@ -19,15 +18,12 @@ class CharDataset(Dataset):
         return len(self.stoi)
 
     def __len__(self):
-        return len(self.data)
+        return len(self.data) - self.block_size - 1
 
     def __getitem__(self, idx=0):
         # grab a chunk of (block_size + 1) characters from the data
         # encode every character to an integer
         # return the chunk and the shifted version as tensors
-
-        end = self.__len__() - self.block_size - 1
-        idx = random.randint(0, end)
         
         chunk = [self.stoi[char] for char in self.data[idx : idx+self.block_size+1]]
         x = torch.tensor(chunk[:-1], dtype=torch.int64)

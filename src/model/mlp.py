@@ -15,7 +15,7 @@ class MLP(nn.Module):
      def forward(self,x):
          
          y1 = self.firstLinearLayer(x)
-         y1 = torch.relu(y1)
+         y1 = torch.nn.functional.gelu(y1)
          y2 = self.SecondeLinearLayer(y1)
 
          return y2
