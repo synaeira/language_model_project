@@ -17,7 +17,7 @@ class TBlock(nn.Module):
      def forward(self, x):
          
          x_n = self.ln1(x)
-         x1, _ = self.mha(x_n)
+         x1 = self.mha(x_n)
 
          x1 = x1 + x
 

@@ -4,14 +4,16 @@ import torch
 class MHA(nn.Module):
      
 
-     def __init__(self, dim_emb, nmbr_head):
-        super().__init__()
-        self.multiheadattention = nn.MultiheadAttention(dim_emb, nmbr_head)
+   def __init__(self, dim_emb, nmbr_head):
+      super().__init__()
+      self.multiheadattention = nn.MultiheadAttention(dim_emb, nmbr_head, batch_first=True)
 
-     def forward(self,x):
+   def forward(self,x):
          
-         causal_mask = torch.triu(torch.ones(len(x), len(x)) * float('-inf'), diagonal=1)
+      batch_size, seq_len, embed_dim = x.size()
 
-         y = self.multiheadattention(query=x, key=x, value=x, need_weights = False, attn_mask = causal_mask)
+      causal_mask = torch.triu(torch.ones(seq_len, seq_len, dtype=torch.bool), diagonal=1)
 
-         return y
+      y, _ = self.multiheadattention(query=x, key=x, value=x, need_weights = False, attn_mask = causal_mask)
+
+      return y

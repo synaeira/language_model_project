@@ -1,7 +1,7 @@
-with open("shakespeare-data.txt", "r") as file:
+with open("./datasets/jul-data.txt", "r") as file:
     data = file.readlines()
 
-subset_data = data[:len(data) // 3]
+subset_data = data[:len(data) // 10]
 
-with open("shakespeare-data-subset.txt", "w") as file:
+with open("./datasets/jul-data-subset.txt", "w") as file:
     file.writelines(subset_data)
