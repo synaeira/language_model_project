@@ -10,8 +10,17 @@ import wandb
 
 class Trainer() :
 
-    def __init__(self, datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration):
+    def __init__(self, datafile=None, block_size=None, batch_size=None, dim_emb=None, hidden_layer=None, 
+                 num_head=None, num_transformer=None, learning_rate=None, iteration=None, load_path=None):
         
+        if load_path:
+            self.load_model(load_path)
+        else:
+            if not all([datafile, block_size, batch_size, dim_emb, hidden_layer, num_head, num_transformer, learning_rate, iteration]):
+                raise ValueError("Missing parameters.")
+        
+        self.datafile = datafile
+
         self.dataset = CharDataset(block_size, datafile)
         self.dl_train = DataLoader(self.dataset, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=4)
         
@@ -26,8 +35,9 @@ class Trainer() :
 
 
     def run(self) :
-        # wandb.init(project=f"loss")
-        
+
+        wandb.init(project=f"loss")
+
         self.model.train()
 
         with tqdm(total=self.it_max, desc="Training Progress", unit="batch") as pbar:
@@ -37,12 +47,12 @@ class Trainer() :
                 self.optimizer.zero_grad()
                 output = self.model(x_train)
 
-                # y_train_ont_hot = nn.functional.one_hot(y_train, self.dataset.get_vocab_size()).to(torch.float)
-                # loss = self.criterion(output, y_train_ont_hot)
-                # wandb.log({"loss": loss})
 
                 loss = self.criterion(output.transpose(-1, -2), y_train)
                 loss.backward()
+
+                wandb.log({f"loss" : loss})
+
 
                 self.optimizer.step()
 
@@ -51,7 +61,7 @@ class Trainer() :
                 pbar.update(1)
                 if i > self.it_max :
                     break
-        # wandb.finish()
+        wandb.finish()
 
 
     def save_model(self, path="model.pth"):
