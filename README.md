@@ -39,20 +39,19 @@ The structure is modular, with components for dataset processing, model training
 
 ---
 
-## Installation
+## Setup
 
-To set up the project, follow these steps:
+All required dependencies are listed in `requirements.txt`. To ensure a smooth setup, install them using:
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-repo-name/transformer-text-gen.git
-   cd transformer-text-gen
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-2. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+Key dependencies include:
+- `torch`: For building and training the Transformer.
+- `torchvision`: Utility functions for PyTorch.
+- `tqdm`: For progress bars.
+- `wandb`: For experiment tracking (optional).
 
 ---
 
@@ -132,22 +131,6 @@ Refer to `results.ipynb` for a complete example:
 
 ### Subset Creation
 Use `subset.py` to generate smaller datasets for experimentation. Adjust parameters to specify the desired subset size.
-
----
-
-## Setup
-
-All required dependencies are listed in `requirements.txt`. To ensure a smooth setup, install them using:
-
-```bash
-pip install -r requirements.txt
-```
-
-Key dependencies include:
-- `torch`: For building and training the Transformer.
-- `torchvision`: Utility functions for PyTorch.
-- `tqdm`: For progress bars.
-- `wandb`: For experiment tracking (optional).
 
 ---
 
